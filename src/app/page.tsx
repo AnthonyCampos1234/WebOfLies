@@ -21,6 +21,13 @@ interface Tweet {
   category: string;
 }
 
+interface CommentaryPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  tweet: Tweet;
+  philosophicalMode: string;
+}
+
 const PROFILE_PICS = Array.from({ length: 20 }, (_, i) => 
   `https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`
 );
@@ -121,6 +128,409 @@ const MISINFORMATION_CATEGORIES = {
   }
 };
 
+const PHILOSOPHICAL_MODES = {
+  POSTMAN: {
+    name: "Neil Postman",
+    description: "Media ecology perspective",
+    getCommentary: (tweet: Tweet) => {
+      switch (tweet.category) {
+        case "HEALTH":
+          if (tweet.content.includes("doctor friend")) {
+            return "Notice how personal anecdotes from 'authority figures' are used to bypass scientific processes - a common tactic in our entertainment-focused media.";
+          } else if (tweet.content.includes("LEAKED") || tweet.content.includes("cover-up")) {
+            return "The dramatic language of 'leaks' and 'cover-ups' transforms health information into entertainment spectacle, prioritizing sensation over science.";
+          } else if (tweet.content.includes("Big Food")) {
+            return "Complex health issues are reduced to simplistic narratives of good versus evil, characteristic of entertainment media.";
+          } else if (tweet.content.includes("WAKE UP")) {
+            return "The dramatic 'wake up' call turns health information into a form of entertainment rebellion narrative.";
+          } else if (tweet.content.includes("scientists who exposed")) {
+            return "Scientific process is transformed into a dramatic narrative of heroic revelation, typical of entertainment media.";
+          } else if (tweet.content.includes("chemical warfare")) {
+            return "Health concerns are repackaged as dramatic warfare narratives, prioritizing entertainment value over scientific accuracy.";
+          } else if (tweet.content.includes("alternative health")) {
+            return "The medium favors alternative narratives that entertain over mainstream science that informs.";
+          } else if (tweet.content.includes("emergency")) {
+            return "Notice how health information is framed as urgent drama to capture attention in our entertainment-driven media.";
+          } else if (tweet.content.includes("foreign countries")) {
+            return "International comparisons are simplified into dramatic narratives that ignore complex policy contexts.";
+          } else if (tweet.content.includes("media won't report")) {
+            return "The narrative of media suppression creates drama while undermining legitimate health journalism.";
+          }
+          return "Health misinformation thrives in our entertainment-driven media environment where dramatic claims spread faster than scientific evidence.";
+        
+        case "POLITICS":
+          if (tweet.content.includes("whistleblower")) {
+            return "The 'whistleblower' narrative turns political discourse into a dramatic storyline, emphasizing entertainment over factual analysis.";
+          } else if (tweet.content.includes("PROOF") || tweet.content.includes("evidence")) {
+            return "Claims of 'proof' are presented as dramatic revelations rather than parts of a methodical verification process.";
+          } else if (tweet.content.includes("silence")) {
+            return "The persecution narrative creates compelling drama while undermining rational political discourse.";
+          } else if (tweet.content.includes("midnight")) {
+            return "Time-specific details are used to create dramatic tension, turning political process into entertainment.";
+          } else if (tweet.content.includes("military intelligence")) {
+            return "Appeals to secretive authorities create dramatic intrigue while bypassing normal verification channels.";
+          } else if (tweet.content.includes("ghost voters")) {
+            return "Dramatic terminology transforms mundane electoral processes into entertainment spectacle.";
+          } else if (tweet.content.includes("foreign servers")) {
+            return "International intrigue is invoked for dramatic effect, overshadowing domestic electoral processes.";
+          } else if (tweet.content.includes("caught on camera")) {
+            return "Visual evidence is promised as dramatic reveal, typical of entertainment media formats.";
+          } else if (tweet.content.includes("alternative vote count")) {
+            return "Competing narratives are presented as dramatic conflict rather than methodological disagreement.";
+          } else if (tweet.content.includes("breaking:")) {
+            return "The 'breaking news' format prioritizes immediacy and drama over verification and context.";
+          }
+          return "Political discourse has been reduced to entertainment spectacle, where emotional appeal trumps reasoned debate.";
+        
+        case "TECHNOLOGY":
+          if (tweet.content.includes("listening")) {
+            return "Fear of surveillance is amplified by our media's tendency to sensationalize technology's capabilities.";
+          } else if (tweet.content.includes("tracking")) {
+            return "Technology fears are packaged into entertaining conspiracy narratives, disconnected from technical reality.";
+          } else if (tweet.content.includes("secretly")) {
+            return "The medium promotes sensational claims about secret technological capabilities over nuanced understanding.";
+          } else if (tweet.content.includes("spying")) {
+            return "Surveillance narratives are dramatized for entertainment value, obscuring real privacy concerns.";
+          } else if (tweet.content.includes("AI")) {
+            return "AI capabilities are sensationalized in ways that prioritize entertainment over technical accuracy.";
+          } else if (tweet.content.includes("remote")) {
+            return "Remote control narratives create dramatic tension while oversimplifying technical realities.";
+          } else if (tweet.content.includes("brain patterns")) {
+            return "Neurological concepts are sensationalized into science-fiction narratives for entertainment value.";
+          } else if (tweet.content.includes("5G")) {
+            return "Technical infrastructure is dramatized into entertainment narratives that ignore engineering realities.";
+          } else if (tweet.content.includes("sleep patterns")) {
+            return "Personal data collection is transformed into dramatic surveillance narratives.";
+          } else if (tweet.content.includes("hidden code")) {
+            return "Technical processes are mystified into entertainment narratives of hidden control.";
+          }
+          return "Technology itself shapes the message - social media's rapid-fire nature promotes sensationalism over substance.";
+      }
+      return "The medium shapes the message, often prioritizing entertainment over truth.";
+    }
+  },
+  PEIRCE: {
+    name: "Charles Peirce",
+    description: "Pragmatic approach to truth",
+    getCommentary: (tweet: Tweet) => {
+      switch (tweet.category) {
+        case "HEALTH":
+          if (tweet.content.includes("study shows")) {
+            return "What's the methodology of this study? Scientific truth requires rigorous experimental design and peer review.";
+          } else if (tweet.content.includes("doctor friend")) {
+            return "Anecdotal evidence, even from medical professionals, cannot replace systematic scientific investigation.";
+          } else if (tweet.content.includes("LEAKED")) {
+            return "Leaked documents require verification through established scientific channels to constitute valid evidence.";
+          } else if (tweet.content.includes("Big Food")) {
+            return "This conspiratorial framing lacks falsifiable hypotheses - what specific claims can be tested?";
+          } else if (tweet.content.includes("chemical")) {
+            return "Chemical interactions require precise scientific study, not vague allegations. What specific compounds? What mechanisms of action?";
+          } else if (tweet.content.includes("scientists who exposed")) {
+            return "Scientific findings gain validity through peer review and replication, not dramatic exposés.";
+          } else if (tweet.content.includes("alternative health")) {
+            return "Alternative treatments must meet the same standards of empirical verification as conventional medicine.";
+          } else if (tweet.content.includes("foreign countries")) {
+            return "Cross-national comparisons require careful control for confounding variables and regulatory differences.";
+          } else if (tweet.content.includes("emergency")) {
+            return "Urgency does not override the need for proper scientific methodology and peer review.";
+          } else if (tweet.content.includes("80%")) {
+            return "Statistical claims require clear methodology: What's the sample size? Control group? Confidence interval?";
+          }
+          return "Medical claims require rigorous scientific testing - anecdotal evidence and correlation are not sufficient for establishing causation.";
+        
+        case "POLITICS":
+          if (tweet.content.includes("statistical")) {
+            return "Statistical claims require transparent methodology and raw data for verification - assertions alone are insufficient.";
+          } else if (tweet.content.includes("proof")) {
+            return "What constitutes this 'proof'? Valid evidence must be testable and reproducible.";
+          } else if (tweet.content.includes("sources")) {
+            return "Anonymous sources must be corroborated through verifiable evidence and established methodologies.";
+          } else if (tweet.content.includes("patterns")) {
+            return "Pattern recognition requires statistical rigor - what's the null hypothesis? What's the p-value?";
+          } else if (tweet.content.includes("midnight")) {
+            return "Temporal correlations need causal mechanisms - timing alone doesn't prove intent.";
+          } else if (tweet.content.includes("foreign")) {
+            return "Claims of foreign involvement require concrete, verifiable evidence, not mere speculation.";
+          } else if (tweet.content.includes("mathematical")) {
+            return "Mathematical proof requires formal demonstration, not just numerical coincidences.";
+          } else if (tweet.content.includes("cyber")) {
+            return "Digital forensics demands rigorous methodology and reproducible results.";
+          } else if (tweet.content.includes("expert")) {
+            return "Expert claims must be verified through peer review and empirical testing.";
+          } else if (tweet.content.includes("evidence")) {
+            return "What type of evidence? How was it collected? Can it be independently verified?";
+          }
+          return "Political claims must be grounded in verifiable evidence, not mere speculation or partisan rhetoric.";
+        
+        case "TECHNOLOGY":
+          if (tweet.content.includes("always listening")) {
+            return "Such claims need empirical testing: What data shows devices are constantly recording? How was this verified?";
+          } else if (tweet.content.includes("tracking")) {
+            return "Tracking claims require technical verification through controlled testing and peer review.";
+          } else if (tweet.content.includes("monitoring")) {
+            return "What measurable evidence supports these monitoring claims? Assertions need technical validation.";
+          } else if (tweet.content.includes("AI")) {
+            return "AI capabilities must be demonstrated through reproducible experiments, not speculative claims.";
+          } else if (tweet.content.includes("hidden code")) {
+            return "Code analysis requires systematic review and verification - what's the evidence for these hidden functions?";
+          } else if (tweet.content.includes("remote")) {
+            return "Remote access claims need technical proof: What protocols? What security vulnerabilities?";
+          } else if (tweet.content.includes("data mining")) {
+            return "Data collection claims require specific technical evidence about methods and scope.";
+          } else if (tweet.content.includes("surveillance")) {
+            return "Surveillance capabilities need technical verification - what specific mechanisms are being claimed?";
+          } else if (tweet.content.includes("5G")) {
+            return "5G claims must be tested against established principles of electromagnetic physics.";
+          } else if (tweet.content.includes("brain patterns")) {
+            return "Neurological claims require rigorous scientific validation through controlled studies.";
+          }
+          return "Technical claims need empirical verification through controlled testing and peer review.";
+      }
+      return "Without experimental validation, this remains mere speculation.";
+    }
+  },
+  NGUYEN: {
+    name: "C Thi Nguyen",
+    description: "Echo chambers expert",
+    getCommentary: (tweet: Tweet) => {
+      switch (tweet.category) {
+        case "HEALTH":
+          if (tweet.content.includes("They don't want you to know")) {
+            return "Classic echo chamber rhetoric: creating an us-vs-them narrative that dismisses outside expertise.";
+          } else if (tweet.content.includes("wake up")) {
+            return "The 'wake up' call is a common echo chamber tactic, implying special insider knowledge while dismissing mainstream sources.";
+          } else if (tweet.content.includes("Big")) {
+            return "Demonizing institutions ('Big' entities) reinforces echo chamber walls by discrediting potential contrary evidence.";
+          } else if (tweet.content.includes("doctor friend")) {
+            return "Echo chambers often elevate informal, unverifiable sources that confirm existing beliefs while rejecting institutional expertise.";
+          } else if (tweet.content.includes("LEAKED")) {
+            return "The appeal to secret knowledge is a classic echo chamber tactic - it can't be verified by outsiders, making it immune to criticism.";
+          } else if (tweet.content.includes("alternative health")) {
+            return "Alternative health communities often function as echo chambers, where skepticism of mainstream medicine reinforces group identity.";
+          } else if (tweet.content.includes("media won't report")) {
+            return "By discrediting mainstream sources, echo chambers become the only trusted source of information.";
+          } else if (tweet.content.includes("scientists who exposed")) {
+            return "Echo chambers often lionize 'rebel' experts who confirm their beliefs while dismissing the broader scientific consensus.";
+          } else if (tweet.content.includes("foreign countries")) {
+            return "Selective use of foreign examples creates an illusion of evidence while ignoring contradicting international data.";
+          } else if (tweet.content.includes("chemical warfare")) {
+            return "Extreme interpretations thrive in echo chambers where moderate voices have been systematically excluded.";
+          }
+          return "Health misinformation thrives in echo chambers where alternative medicine communities reinforce each other's beliefs while rejecting mainstream medical evidence.";
+        
+        case "POLITICS":
+          if (tweet.content.includes("silence")) {
+            return "Claims of silencing often serve to preemptively discredit contrary evidence within political echo chambers.";
+          } else if (tweet.content.includes("media won't report")) {
+            return "Dismissing mainstream media creates a closed information loop where only confirming sources are trusted.";
+          } else if (tweet.content.includes("truth")) {
+            return "Echo chambers often claim monopoly on 'truth' while systematically excluding contrary evidence.";
+          } else if (tweet.content.includes("whistleblower")) {
+            return "Whistleblower narratives in echo chambers often lack the scrutiny applied to contradicting evidence.";
+          } else if (tweet.content.includes("caught on camera")) {
+            return "Selective interpretation of evidence reinforces existing beliefs within the echo chamber.";
+          } else if (tweet.content.includes("military intelligence")) {
+            return "Appeals to shadowy authorities are common in echo chambers - they can't be verified but confirm existing beliefs.";
+          } else if (tweet.content.includes("foreign servers")) {
+            return "Complex technical claims thrive in echo chambers where expertise is selectively accepted or rejected.";
+          } else if (tweet.content.includes("breaking:")) {
+            return "The urgency of 'breaking' news discourages careful evaluation, reinforcing echo chamber dynamics.";
+          } else if (tweet.content.includes("alternative vote count")) {
+            return "Parallel knowledge structures emerge in echo chambers, complete with their own experts and methodologies.";
+          } else if (tweet.content.includes("ghost voters")) {
+            return "Echo chambers can transform mundane irregularities into evidence of vast conspiracies.";
+          }
+          return "Political echo chambers create epistemic bubbles where opposing viewpoints are systematically filtered out and discredited.";
+        
+        case "TECHNOLOGY":
+          if (tweet.content.includes("insider")) {
+            return "Claims of insider knowledge create artificial authority within tech echo chambers.";
+          } else if (tweet.content.includes("They're")) {
+            return "The vague 'they' creates a shadowy opponent, typical of conspiracy-focused echo chambers.";
+          } else if (tweet.content.includes("exposed")) {
+            return "'Exposure' narratives in tech echo chambers often lack external verification.";
+          } else if (tweet.content.includes("listening")) {
+            return "Tech echo chambers often amplify surveillance fears beyond technical realities.";
+          } else if (tweet.content.includes("AI")) {
+            return "AI capabilities are often mythologized in tech echo chambers, creating unrealistic fears and expectations.";
+          } else if (tweet.content.includes("hidden code")) {
+            return "Technical complexity in echo chambers often gets reinterpreted as intentional malice.";
+          } else if (tweet.content.includes("5G")) {
+            return "Echo chambers can transform technical infrastructure into objects of fear through collective reinforcement.";
+          } else if (tweet.content.includes("brain patterns")) {
+            return "Scientific concepts get distorted in echo chambers where technical accuracy is less valued than confirming existing fears.";
+          } else if (tweet.content.includes("remote")) {
+            return "Remote access capabilities are often exaggerated in echo chambers where technical limitations are ignored.";
+          } else if (tweet.content.includes("data mining")) {
+            return "Data collection concerns get amplified in echo chambers where worst-case scenarios are treated as certainties.";
+          }
+          return "Tech communities can become echo chambers where conspiracy theories about surveillance and control go unchallenged.";
+      }
+      return "Echo chambers reinforce existing beliefs while excluding contrary evidence.";
+    }
+  },
+  LEONELLI: {
+    name: "Sabina Leonelli",
+    description: "Data-centric analysis",
+    getCommentary: (tweet: Tweet) => {
+      switch (tweet.category) {
+        case "HEALTH":
+          if (tweet.content.includes("study shows")) {
+            return "Individual studies need proper context within the broader body of medical research data.";
+          } else if (tweet.content.includes("80%")) {
+            return "Statistics without proper context and methodology can mislead - what's the source and scope of this percentage?";
+          } else if (tweet.content.includes("linked to")) {
+            return "Correlation claims require careful data analysis to establish causation.";
+          } else if (tweet.content.includes("doctor friend")) {
+            return "Anecdotal data points cannot substitute for systematic data collection and analysis.";
+          } else if (tweet.content.includes("LEAKED")) {
+            return "Raw data without proper curation and methodological context can lead to misinterpretation.";
+          } else if (tweet.content.includes("worldwide")) {
+            return "Global data requires careful standardization and cross-cultural validation.";
+          } else if (tweet.content.includes("scientists")) {
+            return "Scientific data must be situated within its full experimental and methodological context.";
+          } else if (tweet.content.includes("evidence")) {
+            return "What's the quality and completeness of the underlying dataset?";
+          } else if (tweet.content.includes("research")) {
+            return "Research data requires proper documentation of collection methods and analytical procedures.";
+          } else if (tweet.content.includes("studies")) {
+            return "Multiple studies need systematic meta-analysis, not cherry-picked results.";
+          }
+          return "Health data requires careful curation and context - isolated statistics can be misleading without proper medical interpretation.";
+        
+        case "POLITICS":
+          if (tweet.content.includes("patterns")) {
+            return "Data patterns require rigorous statistical analysis and complete datasets, not cherry-picked examples.";
+          } else if (tweet.content.includes("evidence")) {
+            return "What's the quality and completeness of this evidence? Partial data can create misleading narratives.";
+          } else if (tweet.content.includes("proof")) {
+            return "Claims of proof need transparent access to complete, verifiable datasets.";
+          } else if (tweet.content.includes("statistical")) {
+            return "Statistical analysis requires complete datasets and transparent methodologies.";
+          } else if (tweet.content.includes("numbers")) {
+            return "Raw numbers without proper context and methodology can be misleading.";
+          } else if (tweet.content.includes("analysis")) {
+            return "What analytical methods were used? Are they appropriate for this type of data?";
+          } else if (tweet.content.includes("records")) {
+            return "Record-keeping methodology and completeness are crucial for valid conclusions.";
+          } else if (tweet.content.includes("data shows")) {
+            return "What's the broader context of this data? What collection methods were used?";
+          } else if (tweet.content.includes("confirmed")) {
+            return "Confirmation requires systematic data validation and peer review.";
+          } else if (tweet.content.includes("discovered")) {
+            return "New discoveries must be validated through systematic data analysis.";
+          }
+          return "Political data can be manipulated through selective presentation - we need transparent access to complete datasets.";
+        
+        case "TECHNOLOGY":
+          if (tweet.content.includes("always")) {
+            return "Absolute claims about technology require comprehensive data collection and analysis.";
+          } else if (tweet.content.includes("tracking")) {
+            return "Technical tracking claims need precise data about methods, scope, and limitations.";
+          } else if (tweet.content.includes("monitoring")) {
+            return "Monitoring claims require detailed technical data about capabilities and limitations.";
+          } else if (tweet.content.includes("data mining")) {
+            return "Data mining claims need specific information about collection methods and scope.";
+          } else if (tweet.content.includes("AI")) {
+            return "AI capabilities must be documented with specific technical parameters and limitations.";
+          } else if (tweet.content.includes("algorithm")) {
+            return "Algorithmic claims require detailed technical documentation and validation data.";
+          } else if (tweet.content.includes("system")) {
+            return "System capabilities must be verified through comprehensive technical data.";
+          } else if (tweet.content.includes("analysis")) {
+            return "Technical analysis requires complete datasets and documented methodologies.";
+          } else if (tweet.content.includes("privacy")) {
+            return "Privacy implications must be assessed through systematic data analysis.";
+          } else if (tweet.content.includes("security")) {
+            return "Security claims require comprehensive technical documentation and testing data.";
+          }
+          return "Technical data must be evaluated within its full socio-technical context, not cherry-picked for dramatic effect.";
+      }
+      return "Data without proper context and curation can mislead rather than inform.";
+    }
+  },
+  DESCARTES: {
+    name: "René Descartes",
+    description: "Methodological skepticism",
+    getCommentary: (tweet: Tweet) => {
+      switch (tweet.category) {
+        case "HEALTH":
+          if (tweet.content.includes("study shows")) {
+            return "Let us doubt everything except what can be clearly and distinctly proven. What foundational evidence supports this study?";
+          } else if (tweet.content.includes("doctor friend")) {
+            return "Personal testimony, no matter how authoritative, must be subjected to methodical doubt. What indubitable facts support this claim?";
+          } else if (tweet.content.includes("LEAKED")) {
+            return "Even seemingly concrete evidence must be doubted. How can we be certain these leaks aren't deceptive?";
+          } else if (tweet.content.includes("Big Food")) {
+            return "We must strip away assumptions about institutional motives and examine only what can be proven through reason.";
+          } else if (tweet.content.includes("chemical")) {
+            return "Let us break down these chemical claims into their simplest components and examine what we can know with absolute certainty.";
+          } else if (tweet.content.includes("scientists who exposed")) {
+            return "Authority alone is insufficient - what clear and distinct ideas can we derive from this exposure?";
+          } else if (tweet.content.includes("alternative health")) {
+            return "We must doubt both conventional and alternative approaches equally until we find indubitable truths.";
+          } else if (tweet.content.includes("emergency")) {
+            return "Urgency should not override the need for methodical doubt and clear reasoning.";
+          } else if (tweet.content.includes("cover-up")) {
+            return "Claims of concealment require us to examine what we can know with absolute certainty versus what we merely suspect.";
+          } else if (tweet.content.includes("evidence")) {
+            return "What aspects of this evidence can withstand systematic doubt? What remains indubitably true?";
+          }
+          return "In matters of health, we must doubt everything until we reach clear and distinct ideas that cannot be doubted.";
+
+        case "POLITICS":
+          if (tweet.content.includes("patterns")) {
+            return "What patterns can we establish through pure reason, setting aside all preconceptions and biases?";
+          } else if (tweet.content.includes("proof")) {
+            return "What aspects of this proof can withstand systematic doubt? What foundational truths remain?";
+          } else if (tweet.content.includes("sources")) {
+            return "Even trusted sources must be doubted. What can we establish through reason alone?";
+          } else if (tweet.content.includes("whistleblower")) {
+            return "Let us set aside the emotional appeal and examine what can be known with mathematical certainty.";
+          } else if (tweet.content.includes("manipulation")) {
+            return "Claims of manipulation require us to doubt everything except what can be clearly and distinctly proven.";
+          } else if (tweet.content.includes("foreign")) {
+            return "International intrigue often clouds clear reasoning. What can we know with absolute certainty?";
+          } else if (tweet.content.includes("evidence")) {
+            return "We must methodically doubt all evidence until we reach indubitable truth.";
+          } else if (tweet.content.includes("conspiracy")) {
+            return "Complex theories require us to return to first principles - what can we know beyond doubt?";
+          } else if (tweet.content.includes("truth")) {
+            return "Truth must be established through systematic doubt and pure reason, not mere assertion.";
+          } else if (tweet.content.includes("exposed")) {
+            return "Exposures and revelations must be subjected to the same rigorous doubt as any other claim.";
+          }
+          return "Political claims must be stripped of all assumptions until we reach clear and distinct ideas.";
+
+        case "TECHNOLOGY":
+          if (tweet.content.includes("AI")) {
+            return "Can we be certain about the nature of artificial intelligence? What can we know through pure reason?";
+          } else if (tweet.content.includes("listening")) {
+            return "How can we be certain about surveillance claims? What evidence withstands methodical doubt?";
+          } else if (tweet.content.includes("tracking")) {
+            return "Let us doubt all tracking claims until we reach indubitable technical truths.";
+          } else if (tweet.content.includes("hidden")) {
+            return "Claims of hidden functionality must be subjected to systematic doubt - what can we prove with certainty?";
+          } else if (tweet.content.includes("monitoring")) {
+            return "We must question all assumptions about monitoring capabilities until we reach clear and distinct ideas.";
+          } else if (tweet.content.includes("data")) {
+            return "What can we know with certainty about data collection? Let us apply methodical doubt.";
+          } else if (tweet.content.includes("privacy")) {
+            return "Privacy concerns must be examined through the lens of systematic doubt - what remains indubitable?";
+          } else if (tweet.content.includes("secret")) {
+            return "Claims of secrecy require us to doubt everything except what can be proven through pure reason.";
+          } else if (tweet.content.includes("control")) {
+            return "Let us strip away assumptions about control and examine what can be known with mathematical certainty.";
+          } else if (tweet.content.includes("system")) {
+            return "We must doubt all claims about systems until we reach clear and distinct technical truths.";
+          }
+          return "Technological claims must be subjected to systematic doubt until we reach indubitable truth.";
+      }
+      return "Through methodical doubt, we must seek clear and distinct ideas that cannot be questioned.";
+    }
+  }
+};
+
 interface Node {
   id: string;
   x: number;
@@ -160,6 +570,146 @@ const calculateNodeDepth = (tweet: Tweet, tweets: Tweet[]): number => {
   return calculateNodeDepth(parent, tweets) + 1;
 };
 
+interface InfoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="bg-gray-900 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div className="p-6">
+          <h2 className="text-2xl font-bold mb-4">Welcome to the Misinformation Network Simulator</h2>
+          
+          <div className="space-y-4">
+            <section>
+              <h3 className="text-xl font-semibold mb-2">How It Works</h3>
+              <p className="text-gray-300">
+                Watch how misinformation spreads across social networks through different categories: Health, Politics, and Technology. 
+                Start with a seed post and observe how it evolves and spreads through the network.
+              </p>
+              <p className="text-gray-300">
+                Use the controls to adjust the simulation speed, pause, or reset the network. You can also switch between different philosophical modes to see how each perspective interprets the spread of misinformation.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="text-xl font-semibold mb-2">Philosophical Lenses</h3>
+              <div className="space-y-2">
+                <div>
+                  <h4 className="font-semibold">Neil Postman</h4>
+                  <p className="text-gray-300">Focuses on how media technology shapes information spread, creating wider, more connected networks.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Charles Peirce</h4>
+                  <p className="text-gray-300">Emphasizes methodical, scientific approach with structured, hierarchical networks.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">C Thi Nguyen</h4>
+                  <p className="text-gray-300">Explores echo chambers and epistemic bubbles, creating tight information clusters.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Sabina Leonelli</h4>
+                  <p className="text-gray-300">Focuses on data relationships and connections in knowledge spread.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">René Descartes</h4>
+                  <p className="text-gray-300">Applies methodological skepticism, questioning all claims until reaching clear and distinct truths.</p>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h3 className="text-xl font-semibold mb-2">Controls</h3>
+              <ul className="list-disc list-inside text-gray-300">
+                <li>Choose a misinformation category to start the simulation.</li>
+                <li>Adjust the spread speed with the slider to see how quickly misinformation can propagate.</li>
+                <li>Use the start, pause, or reset buttons to control the simulation flow.</li>
+                <li>Switch between philosophical modes using the dropdown menu at the top.</li>
+                <li><span className="font-semibold">Click "View Analysis" below any tweet to see that philosopher's specific commentary on the post.</span></li>
+              </ul>
+            </section>
+
+            <section>
+              <h3 className="text-xl font-semibold mb-2">Viewing Philosophical Commentary</h3>
+              <p className="text-gray-300">
+                1. Select a philosopher from the dropdown menu at the top
+              </p>
+              <p className="text-gray-300">
+                2. Find a tweet you want to analyze in the feed
+              </p>
+              <p className="text-gray-300">
+                3. Click the "View Analysis" button below that tweet
+              </p>
+              <p className="text-gray-300">
+                4. A popup will appear with the philosopher's specific analysis of that tweet's content
+              </p>
+            </section>
+
+            <section>
+              <h3 className="text-xl font-semibold mb-2">Acknowledgments</h3>
+              <p className="text-gray-300">
+                We would like to thank Professor Hanley for a great semester. Your insights into how different philosophers approach truth and knowledge have directly inspired this simulation. We hope you enjoy exploring how each philosophical perspective analyzes and responds to modern misinformation spread!
+              </p>
+            </section>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Got it, let's start!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CommentaryPopup: React.FC<CommentaryPopupProps> = ({ isOpen, onClose, tweet, philosophicalMode }) => {
+  if (!isOpen) return null;
+
+  const philosopher = PHILOSOPHICAL_MODES[philosophicalMode as keyof typeof PHILOSOPHICAL_MODES];
+  const commentary = philosopher.getCommentary(tweet);
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="bg-gray-900 rounded-lg max-w-lg w-full">
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-4">
+            <h2 className="text-xl font-bold">{philosopher.name}'s Analysis</h2>
+            <button 
+              onClick={onClose}
+              className="text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+          </div>
+          
+          <div className="mb-4">
+            <div className="bg-gray-800 rounded p-3 mb-4">
+              <p className="text-sm text-gray-300">Original Post:</p>
+              <p className="font-medium mt-1">{tweet.content}</p>
+            </div>
+            
+            <div className="bg-gray-800/50 rounded p-3">
+              <p className="text-sm text-gray-300">Commentary:</p>
+              <p className="text-blue-400 mt-1">{commentary}</p>
+            </div>
+          </div>
+
+          <p className="text-sm text-gray-400 italic">
+            {philosopher.description}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [tweets, setTweets] = useState<Tweet[]>([]);
@@ -186,6 +736,10 @@ export default function Home() {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [links, setLinks] = useState<Link[]>([]);
   const animationFrameRef = useRef<number>();
+  const [philosophicalMode, setPhilosophicalMode] = useState("POSTMAN");
+  const [showInfoModal, setShowInfoModal] = useState(true);
+  const [selectedTweet, setSelectedTweet] = useState<Tweet | null>(null);
+  const [showCommentary, setShowCommentary] = useState(false);
 
   const generateUsername = () => {
     const adjectives = ['Truth', 'Real', 'Free', 'Patriot', 'Wake', 'Digital', 'Cosmic', 'Global'];
@@ -453,8 +1007,28 @@ export default function Home() {
         const newTweetsToAdd = [];
         const maxNewTweets = Math.min(2, seed.variants.length - currentTweets.length + 1);
         
+        const philosophicalSettings = PHILOSOPHICAL_MODES[philosophicalMode as keyof typeof PHILOSOPHICAL_MODES];
+        
         for (let i = 0; i < maxNewTweets; i++) {
-          if (Math.random() < 0.3 && currentTweets.length < seed.variants.length + 1) {
+          let spreadProbability = 0.3; 
+          
+          switch(philosophicalMode) {
+            case 'POSTMAN':
+              spreadProbability = activeCategory === 'TECHNOLOGY' ? 0.4 : 0.25;
+              break;
+            case 'NGUYEN':
+              spreadProbability = currentTweets.length < 10 ? 0.35 : 0.2;
+              break;
+            case 'PEIRCE':
+              spreadProbability = i === 0 ? 0.35 : 0.2;
+              break;
+            case 'LEONELLI':
+              const maxDepth = Math.max(...currentTweets.map(t => calculateNodeDepth(t, currentTweets)));
+              spreadProbability = maxDepth < 3 ? 0.35 : 0.2;
+              break;
+          }
+
+          if (Math.random() < spreadProbability && currentTweets.length < seed.variants.length + 1) {
             const recentTweets = currentTweets.slice(-Math.min(3, currentTweets.length));
             const allPotentialParents = currentTweets.filter(t => calculateNodeDepth(t, currentTweets) < 4);
             const parentTweet = Math.random() < 0.7
@@ -494,6 +1068,7 @@ export default function Home() {
         }
 
         const allNewTweets = [...currentTweets, ...newTweetsToAdd];
+        
         const totalReactions = allNewTweets.reduce((acc, tweet) => ({
           angry: acc.angry + tweet.reactions.angry,
           wow: acc.wow + tweet.reactions.wow,
@@ -503,7 +1078,7 @@ export default function Home() {
 
         setStats(prev => ({
           totalSpread: prev.totalSpread + newTweetsToAdd.length,
-          reachPerMinute: Math.floor(Math.random() * 200 + 100), 
+          reachPerMinute: Math.floor(Math.random() * 200 + 100),
           activeThreads: allNewTweets.length,
           categoryBreakdown: {
             ...prev.categoryBreakdown,
@@ -514,10 +1089,10 @@ export default function Home() {
 
         return allNewTweets;
       });
-    }, 2000 / speed); 
+    }, 2000 / speed);
 
     return () => clearInterval(spreadInterval);
-  }, [isSimulationRunning, speed, activeCategory, isPaused]);
+  }, [isSimulationRunning, speed, activeCategory, isPaused, philosophicalMode]);
 
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   useEffect(() => {
@@ -528,8 +1103,16 @@ export default function Home() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  useEffect(() => {
+    setShowInfoModal(true);
+  }, []);
+
   return (
     <div className="relative min-h-screen">
+      <InfoModal 
+        isOpen={showInfoModal} 
+        onClose={() => setShowInfoModal(false)} 
+      />
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] min-h-screen">
         <div className="relative h-screen">
           <canvas 
@@ -583,6 +1166,12 @@ export default function Home() {
                 {isPaused ? 'Resume' : 'Pause'}
               </button>
               <button
+                onClick={() => setShowInfoModal(true)}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm"
+              >
+                Instructions
+              </button>
+              <button
                 onClick={() => {
                   setIsSimulationRunning(false);
                   setTweets([]);
@@ -615,6 +1204,21 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <div className="bg-gray-900/80 p-3 rounded-lg mb-2">
+            <h3 className="text-sm font-bold mb-2">Philosophical Lens</h3>
+            <select 
+              value={philosophicalMode}
+              onChange={(e) => setPhilosophicalMode(e.target.value)}
+              className="w-full bg-gray-800 rounded p-1 text-sm mb-2"
+            >
+              {Object.entries(PHILOSOPHICAL_MODES).map(([key, mode]) => (
+                <option key={key} value={key}>{mode.name}</option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-400">
+              {PHILOSOPHICAL_MODES[philosophicalMode as keyof typeof PHILOSOPHICAL_MODES].description}
+            </p>
+          </div>
           <div className="flex-1 bg-gray-900/80 p-3 rounded-lg overflow-hidden">
             <h2 className="text-lg font-bold mb-2">Live Feed</h2>
             <div className="space-y-2 h-[calc(100vh-280px)] overflow-y-auto">
@@ -643,6 +1247,15 @@ export default function Home() {
                         <span>❤️ {tweet.likes}</span>
                         <span>🔄 {tweet.retweets}</span>
                         <span>{new Date(tweet.timestamp).toLocaleTimeString()}</span>
+                        <button
+                          onClick={() => {
+                            setSelectedTweet(tweet);
+                            setShowCommentary(true);
+                          }}
+                          className="text-blue-400 hover:text-blue-300"
+                        >
+                          View Analysis
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -652,6 +1265,14 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {selectedTweet && (
+        <CommentaryPopup
+          isOpen={showCommentary}
+          onClose={() => setShowCommentary(false)}
+          tweet={selectedTweet}
+          philosophicalMode={philosophicalMode}
+        />
+      )}
     </div>
   );
 }
