@@ -2,6 +2,8 @@
 
 An interactive visualization tool that demonstrates how misinformation spreads across social networks, analyzed through different philosophical perspectives.
 
+🌐 **Live Demo**: [https://web-of-lies.vercel.app/](https://web-of-lies.vercel.app/)
+
 ## Overview
 
 Web of Lies is an educational platform that simulates and visualizes the spread of misinformation in real-time. The project combines network visualization with philosophical analysis to help users understand how false information propagates and how different thinkers would interpret this phenomenon.
