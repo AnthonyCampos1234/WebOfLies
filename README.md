@@ -77,5 +77,4 @@ This tool is designed to:
   - René Descartes
 
 ---
-
-Built with ❤️ for Professor Hanley's Philosophy Class by Anthony Campos and Xander Hoke
+by Anthony Campos
